@@ -28,7 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(cors -> cors.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/v1/api/employee/sales/**").hasAuthority("VENTAS")
                         .requestMatchers("/v1/api/employee/purchases/**").hasAuthority("COMPRAS")
                         .requestMatchers("/v1/api/employee/logistics/**").hasAuthority("LOGISTICA")
-                        .requestMatchers("/v1/api/employee/inventory**").hasAuthority("INVENTARIO")
+                        .requestMatchers("/v1/api/employee/gerency/**").hasAuthority("GERENCIA")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -48,6 +48,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 

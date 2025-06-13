@@ -3,8 +3,11 @@ package com.portable.app.security;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +27,17 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
+
+        List<String> roles = userDetails.getAuthorities()
+            .stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
+
+        System.out.println("Roles del usuario: " + roles);
+
         String token = JWT.create()
                 .withSubject(userDetails.getUsername())
+                .withClaim("authorities", roles)
                 .withIssuedAt(new Date())
                 .withExpiresAt(Date.from(Instant.now().plus(1, ChronoUnit.DAYS)))
                 .sign(geAlgorithm());
