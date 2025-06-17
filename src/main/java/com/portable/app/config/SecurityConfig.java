@@ -34,10 +34,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/v1/api/auth/**").permitAll()
                         .requestMatchers("/v1/api/admin/**").hasAuthority("ADMINISTRADOR")
-                        .requestMatchers("/v1/api/employee/sales/**").hasAuthority("VENTAS")
-                        .requestMatchers("/v1/api/employee/purchases/**").hasAuthority("COMPRAS")
-                        .requestMatchers("/v1/api/employee/logistics/**").hasAuthority("LOGISTICA")
-                        .requestMatchers("/v1/api/employee/gerency/**").hasAuthority("GERENCIA")
+                        .requestMatchers("/v1/api/sales/**").hasAuthority("VENTAS")
+                        .requestMatchers("/v1/api/purchases/**").hasAuthority("COMPRAS")
+                        .requestMatchers("/v1/api/logistics/**").hasAuthority("LOGISTICA")
+                        .requestMatchers("/v1/api/inventory/**").hasAuthority("INVENTARIO")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
