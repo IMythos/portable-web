@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,11 +24,13 @@ public class Unit {
     @Column(name = "id_unidad")
     private Integer unitId;
 
-    @Column(name = "id_producto", nullable = false)
-    private Integer productId;
+    @ManyToOne
+    @JoinColumn(name = "id_producto", nullable = false)
+    private Product product;
 
-    @Column(name = "id_almacen", nullable = false)
-    private Integer warehouseId;
+    @ManyToOne
+    @JoinColumn(name = "id_almacen", nullable = false)
+    private Warehouse warehouse;
 
     @Column(name = "serie", nullable = false, unique = true)
     private String series;

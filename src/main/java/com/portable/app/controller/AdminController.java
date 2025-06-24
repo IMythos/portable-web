@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.portable.app.dto.EmployeeDto;
 import com.portable.app.dto.UnitBrandDto;
+import com.portable.app.dto.WarehouseResponseDto;
 import com.portable.app.entity.Product;
 import com.portable.app.service.EmployeeServiceImpl;
 import com.portable.app.service.ProductServiceImpl;
 import com.portable.app.service.UnitServiceImpl;
+import com.portable.app.service.WarehouseServiceImpl;
 
 @RestController
 @RequestMapping("/v1/api/admin")
@@ -29,6 +31,9 @@ public class AdminController {
 
     @Autowired
     private UnitServiceImpl unitServiceImpl;
+
+    @Autowired
+    private WarehouseServiceImpl warehouseServiceImpl;
 
     // ===== USUARIO ADMINISTRADOR =====
     // Obtiene sus propios datos de usuario
@@ -58,5 +63,13 @@ public class AdminController {
     @GetMapping("/top-brands")
     public List<UnitBrandDto> getTopBrands() {
         return unitServiceImpl.listUnitsPerBrand();
+    }
+
+    // ====== USUARIO ADMINISTRADOR (INVENTARIO) ======
+    // [GET] -> Obtiene lista de almacenes
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @GetMapping("/warehouses")
+    public List<WarehouseResponseDto> getWarehouses() {
+        return warehouseServiceImpl.listWarehouses();
     }
 }

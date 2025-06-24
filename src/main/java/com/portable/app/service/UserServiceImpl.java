@@ -20,5 +20,5 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findAll();
     }
 
-
+    
 }
