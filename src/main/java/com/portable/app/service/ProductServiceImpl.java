@@ -35,4 +35,45 @@ public class ProductServiceImpl implements IProductService {
             ))
             .toList();
     }
+
+    @Override
+    @Transactional
+    public Product createProduct(Product product) {
+        Integer newId = productRepository.insertProduct(
+            product.getProductCode(),
+            product.getProductAnnex(),
+            product.getDescription(),
+            product.getSalePrice().doubleValue(),
+            product.getPurchasePrice().doubleValue(),
+            product.getWholeSale().doubleValue(),
+            product.getCategory(),
+            product.getStatus(),
+            product.getBrand()
+        );
+        product.setProductId(newId);
+        return product;
+    }
+
+    @Override
+    @Transactional
+    public void updateProduct(Product product) {
+        productRepository.updateProduct(
+            product.getProductId(),
+            product.getProductCode(),
+            product.getProductAnnex(),
+            product.getDescription(),
+            product.getSalePrice().doubleValue(),
+            product.getPurchasePrice().doubleValue(),
+            product.getWholeSale().doubleValue(),
+            product.getCategory(),
+            product.getStatus(),
+            product.getBrand()
+        );
+    }
+
+    @Override
+    @Transactional
+    public void deleteProduct(Integer productId) {
+        productRepository.deleteProduct(productId);
+    }
 }
