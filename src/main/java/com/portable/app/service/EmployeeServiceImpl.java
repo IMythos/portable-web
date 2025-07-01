@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.portable.app.dto.EmployeeDto;
+import com.portable.app.entity.Employee;
 import com.portable.app.interfaces.IEmployeeService;
 import com.portable.app.repository.EmployeeRepository;
 
@@ -40,5 +41,48 @@ public class EmployeeServiceImpl implements IEmployeeService {
                     );
                 })
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public Employee createEmployee(Employee employee) {
+        Integer newId = employeeRepository.insertEmployee(
+            employee.getEmployeeName(),
+            employee.getMaternalSurname(),
+            employee.getPaternalSurname(),
+            employee.getDni(),
+            employee.getAddress(),
+            employee.getPhoneNumber(),
+            employee.getEmail(),
+            employee.getSex(),
+            employee.getBirthDate(),
+            employee.getEntryDate()
+        );
+        employee.setEmployeeId(newId);
+        return employee;
+    }
+
+    @Override
+    @Transactional
+    public void updateEmployee(Employee employee) {
+        employeeRepository.updateEmployee(
+            employee.getEmployeeId(),
+            employee.getEmployeeName(),
+            employee.getMaternalSurname(),
+            employee.getPaternalSurname(),
+            employee.getDni(),
+            employee.getAddress(),
+            employee.getPhoneNumber(),
+            employee.getEmail(),
+            employee.getSex(),
+            employee.getBirthDate(),
+            employee.getEntryDate()
+        );
+    }
+
+    @Override
+    @Transactional
+    public void deleteEmployee(Integer employeeId) {
+        employeeRepository.deleteEmployee(employeeId);
     }
 }
