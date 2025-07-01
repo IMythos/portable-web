@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.portable.app.dto.EmployeeDto;
 import com.portable.app.dto.UnitBrandDto;
+import com.portable.app.dto.UnitDto;
 import com.portable.app.dto.WarehouseResponseDto;
 import com.portable.app.entity.Employee;
 import com.portable.app.entity.Product;
@@ -188,6 +189,47 @@ public class AdminController {
     public ResponseEntity<Void> deleteRole(@PathVariable Integer id) {
         try {
             roleServiceImpl.deleteRole(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception error) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // UNITS (DTO TRANSFER)
+    @GetMapping("/units")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public List<UnitDto> listUnits() {
+        return unitServiceImpl.listUnits();
+    }
+
+    @PostMapping("/unit/create")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<UnitDto> createUnit(@RequestBody UnitDto unitDto) {
+        try {
+            UnitDto createdUnit = unitServiceImpl.createUnit(unitDto);
+            return ResponseEntity.ok(createdUnit);
+        } catch (Exception error) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PutMapping("/unit/update/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<Void> updateUnit(@PathVariable Integer id, @RequestBody UnitDto unitDto) {
+        try {
+            unitDto.setUnitId(id);
+            unitServiceImpl.updateUnit(unitDto);
+            return ResponseEntity.ok().build();
+        } catch (Exception error) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("/unit/delete/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<Void> deleteUnit(@PathVariable Integer id) {
+        try {
+            unitServiceImpl.deleteUnit(id);
             return ResponseEntity.ok().build();
         } catch (Exception error) {
             return ResponseEntity.badRequest().build();
