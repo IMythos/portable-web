@@ -1,5 +1,8 @@
 package com.portable.app.entity;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,32 +17,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Usuario", schema = "Administracion")
 @Data
+@Table(name = "Compra", schema = "Compras")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Purchase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
-    private Integer userId;
-
-    @Column(name = "nom_usu", length = 50, nullable = false)
-    private String username;
-
-    @Column(name = "clave", length = 100, nullable = false)
-    private String password;
-
-    @Column(name = "estado", nullable = false)
-    private boolean status;
-
-    // Mapeo de las FK
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_rol", nullable = false)
-    private Role role;
+    @Column(name = "id_compra")
+    private Integer purchaseId;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_empleado", nullable = false)
-    private Employee employee;
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_proveedor", nullable = false)
+    private Provider provider;
+
+    @Column(name = "fecha")
+    private LocalDate date;
+
+    @Column(name = "total", precision = 18, scale = 2)
+    private BigDecimal totalAmount;
 }

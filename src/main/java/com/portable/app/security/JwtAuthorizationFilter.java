@@ -36,7 +36,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        System.out.println("Token interceptado: " + token);
 
         try {
             String username = jwtService.extractUsername(token);
@@ -49,9 +48,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));   
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                    System.out.println("Token válido para el usuario: " + username);
                 } else {
-                    System.out.println("Token no válido o expirado para el usuario: " + username);
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 }
             }
