@@ -14,41 +14,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.portable.app.dto.PurchaseDto;
-import com.portable.app.entity.Purchase;
-import com.portable.app.service.PurchaseServiceImpl;
+import com.portable.app.dto.PurchaseDetailDto;
+import com.portable.app.entity.PurchaseDetail;
+import com.portable.app.service.PurchaseDetailServiceImpl;
 
 @RestController
-@RequestMapping("/v1/api/purchases")
-public class PurchaseController {
+@RequestMapping("/v1/api/purchase-details")
+public class PurchaseDetailController {
 
     @Autowired
-    private PurchaseServiceImpl purchaseServiceImpl;
+    private PurchaseDetailServiceImpl purchaseDetailServiceImpl;
 
     @GetMapping("/list")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'COMPRAS')")
-    public List<Purchase> getPurchasesList() {
-        return purchaseServiceImpl.listPurchases();
+    public List<PurchaseDetail> getPurchaseDetailsList() {
+        return purchaseDetailServiceImpl.listPurchaseDetails();
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'COMPRAS')")
-    public ResponseEntity<PurchaseDto> createPurchase(@RequestBody PurchaseDto purchaseDto) {
+    public ResponseEntity<PurchaseDetailDto> createPurchaseDetail(@RequestBody PurchaseDetailDto purchaseDetailDto) {
         try {
-            PurchaseDto createdPurchase = purchaseServiceImpl.createPurchase(purchaseDto);
-            return ResponseEntity.ok(createdPurchase);
-        } catch (Exception e) {
+            PurchaseDetailDto createPurchaseDetail  = purchaseDetailServiceImpl.createPurchaseDetail(purchaseDetailDto);
+            return ResponseEntity.ok(createPurchaseDetail);
+        }catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'COMPRAS')")
-    public ResponseEntity<Void> updatePurchase(@PathVariable Integer id, @RequestBody PurchaseDto purchaseDto) {
+    public ResponseEntity<Void> updatePurchaseDetail(@PathVariable Integer id, @RequestBody PurchaseDetailDto purchaseDetailDto) {
         try {
-            purchaseDto.setPurchaseId(id);
-            purchaseServiceImpl.updatePurchase(purchaseDto);
-
+            purchaseDetailDto.setPurchaseDetailId(id);
+            purchaseDetailServiceImpl.updatePurchaseDetail(purchaseDetailDto);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -57,9 +56,9 @@ public class PurchaseController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'COMPRAS')")
-    public ResponseEntity<Void> deletePurchase(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletePurchaseDetail(@PathVariable Integer id) {
         try {
-            purchaseServiceImpl.deletePurchase(id);
+            purchaseDetailServiceImpl.deletePurchaseDetail(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

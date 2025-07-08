@@ -1,21 +1,31 @@
 package com.portable.app.service;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.portable.app.dto.EmployeeDto;
 import com.portable.app.entity.Employee;
+import com.portable.app.entity.User;
 import com.portable.app.interfaces.IEmployeeService;
 import com.portable.app.repository.EmployeeRepository;
+import com.portable.app.repository.UserRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class EmployeeServiceImpl implements IEmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -47,17 +57,16 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Transactional
     public Employee createEmployee(Employee employee) {
         Integer newId = employeeRepository.insertEmployee(
-            employee.getEmployeeName(),
-            employee.getMaternalSurname(),
-            employee.getPaternalSurname(),
-            employee.getDni(),
-            employee.getAddress(),
-            employee.getPhoneNumber(),
-            employee.getEmail(),
-            employee.getSex(),
-            employee.getBirthDate(),
-            employee.getEntryDate()
-        );
+                employee.getEmployeeName(),
+                employee.getMaternalSurname(),
+                employee.getPaternalSurname(),
+                employee.getDni(),
+                employee.getAddress(),
+                employee.getPhoneNumber(),
+                employee.getEmail(),
+                employee.getSex(),
+                employee.getBirthDate(),
+                employee.getEntryDate());
         employee.setEmployeeId(newId);
         return employee;
     }
@@ -66,23 +75,80 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Transactional
     public void updateEmployee(Employee employee) {
         employeeRepository.updateEmployee(
-            employee.getEmployeeId(),
-            employee.getEmployeeName(),
-            employee.getMaternalSurname(),
-            employee.getPaternalSurname(),
-            employee.getDni(),
-            employee.getAddress(),
-            employee.getPhoneNumber(),
-            employee.getEmail(),
-            employee.getSex(),
-            employee.getBirthDate(),
-            employee.getEntryDate()
-        );
+                employee.getEmployeeId(),
+                employee.getEmployeeName(),
+                employee.getMaternalSurname(),
+                employee.getPaternalSurname(),
+                employee.getDni(),
+                employee.getAddress(),
+                employee.getPhoneNumber(),
+                employee.getEmail(),
+                employee.getSex(),
+                employee.getBirthDate(),
+                employee.getEntryDate());
     }
 
     @Override
     @Transactional
     public void deleteEmployee(Integer employeeId) {
         employeeRepository.deleteEmployee(employeeId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Integer getTotalEmployees() {
+        return employeeRepository.getTotalEmployees();
+    }
+
+    @Override
+    public List<Map<String, Object>> getEmployeesByYearOfJoining() {
+        List<Object[]> results = employeeRepository.getEmployeesByYearOfJoining();
+        List<Map<String, Object>> data = new ArrayList<>();
+
+        for (Object[] row : results) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("year", row[0]);
+            map.put("totalEmployees", row[1]);
+            data.add(map);
+        }
+
+        return data;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Integer getTotalUsers() {
+        return employeeRepository.getTotalUsers();
+    }
+
+    @Override
+    public EmployeeDto findEmployeeDtoById(Integer employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new EntityNotFoundException("Empleado no encontrado."));
+
+        // Busca el usuario asociado a este empleado
+        User user = userRepository.findByEmployee_EmployeeId(employeeId).orElse(null);
+
+        Integer roleId = null;
+        String roleName = null;
+        if (user != null && user.getRole() != null) {
+            roleId = user.getRole().getIdRole();
+            roleName = user.getRole().getRoleName();
+        }
+
+        return new EmployeeDto(
+                employee.getEmployeeId(),
+                roleId,
+                roleName,
+                employee.getEmployeeName(),
+                employee.getMaternalSurname(),
+                employee.getPaternalSurname(),
+                employee.getDni(),
+                employee.getAddress(),
+                employee.getPhoneNumber(),
+                employee.getEmail(),
+                employee.getSex(),
+                employee.getBirthDate(),
+                employee.getEntryDate());
     }
 }

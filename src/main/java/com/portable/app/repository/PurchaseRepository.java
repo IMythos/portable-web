@@ -1,6 +1,5 @@
 package com.portable.app.repository;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,22 +18,20 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Integer> {
     @Procedure(procedureName = "Compras.usp_ListarCompras")
     List<Purchase> listPurchases();
 
-    @Query(value = "EXEC Compras.usp_InsertarCompra :id_usuario, :id_proveedor, :fecha, :total", nativeQuery = true)
+    @Query(value = "EXEC Compras.usp_InsertarCompra :id_usuario, :id_proveedor, :fecha", nativeQuery = true)
     Integer insertPurchase(
         @Param("id_usuario") Integer userId,
         @Param("id_proveedor") Integer providerId,
-        @Param("fecha") LocalDate purchaseDate,
-        @Param("total") BigDecimal totalAmount
+        @Param("fecha") LocalDate purchaseDate
     );
 
     @Modifying
-    @Query(value = "EXEC Compras.usp_ActualizarCompra :id_compra, :id_usuario, :id_proveedor, :fecha, :total", nativeQuery = true)
+    @Query(value = "EXEC Compras.usp_ActualizarCompra :id_compra, :id_usuario, :id_proveedor, :fecha", nativeQuery = true)
     void updatePurchase(
         @Param("id_compra") Integer purchaseId,
         @Param("id_usuario") Integer userId,
         @Param("id_proveedor") Integer providerId,
-        @Param("fecha") LocalDate purchaseDate,
-        @Param("total") BigDecimal totalAmount
+        @Param("fecha") LocalDate purchaseDate
     );
 
     @Procedure(procedureName = "Compras.usp_BorrarCompra")

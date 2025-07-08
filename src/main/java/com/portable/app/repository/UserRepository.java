@@ -41,4 +41,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Procedure(procedureName = "Administracion.usp_BorrarUsuario")
     void deleteUser(Integer userId);
+
+    Optional<User> findByEmployee_EmployeeId(Integer employeeId);
 }

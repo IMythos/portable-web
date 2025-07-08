@@ -2,6 +2,7 @@ package com.portable.app.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -50,4 +51,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     @Procedure(procedureName = "Administracion.usp_BorrarEmpleado")
     void deleteEmployee(Integer idEmpleado);
+
+    @Query(value = "EXEC Administracion.usp_TotalEmpleados", nativeQuery = true)
+    Integer getTotalEmployees();
+
+    @Query(value = "EXEC Administracion.usp_EmpleadosPorAnioIngreso", nativeQuery = true)
+    List<Object[]> getEmployeesByYearOfJoining();
+
+    @Query(value = "EXEC Administracion.usp_TotalEmpleadosConUsuario", nativeQuery = true)
+    Integer getTotalUsers();
+
+    Optional<Employee> findById(Integer employeeId);
 }

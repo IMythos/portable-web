@@ -76,4 +76,35 @@ public class ProductServiceImpl implements IProductService {
     public void deleteProduct(Integer productId) {
         productRepository.deleteProduct(productId);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Object[]> top5BrandsByProductCount() {
+        return productRepository.top5BrandsByProductCount();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Object[]> top5ProductsBySalePrice() {
+        return productRepository.top5ProductsBySalePrice();
+    }
+
+    @Override
+    public Product findProductById(Integer productId) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new RuntimeException("No se encontro el producto con ID: " + productId));
+        
+        return new Product(
+            product.getProductId(),
+            product.getProductCode(),
+            product.getProductAnnex(),
+            product.getDescription(),
+            product.getSalePrice(),
+            product.getPurchasePrice(),
+            product.getWholeSale(),
+            product.getCategory(),
+            product.getStatus(),
+            product.getBrand()
+        );
+    }
 }

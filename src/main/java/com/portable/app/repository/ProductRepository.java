@@ -1,6 +1,7 @@
 package com.portable.app.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -47,4 +48,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Procedure(procedureName = "Inventario.usp_BorrarProducto")
     void deleteProduct(Integer id_producto);
+
+    @Procedure(procedureName = "Inventario.usp_Top5MarcasPorCantidad")
+    List<Object[]> top5BrandsByProductCount();
+
+    @Procedure(procedureName = "Inventario.usp_Top5ProductosPorPrecioVenta")
+    List<Object[]> top5ProductsBySalePrice();
+
+    Optional<Product> findById(Integer productId);
 }

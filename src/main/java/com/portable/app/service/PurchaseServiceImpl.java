@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.portable.app.dto.PurchaseDto;
 import com.portable.app.entity.Purchase;
 import com.portable.app.interfaces.IPurchaseService;
 import com.portable.app.repository.PurchaseRepository;
@@ -24,27 +25,25 @@ public class PurchaseServiceImpl implements IPurchaseService{
 
     @Override
     @Transactional
-    public Purchase createPurchase(Purchase purchase) {
+    public PurchaseDto createPurchase(PurchaseDto purchaseDto) {
         Integer newId = purchaseRepository.insertPurchase(
-            purchase.getUser().getUserId(),
-            purchase.getProvider().getProviderId(),
-            purchase.getDate(),
-            purchase.getTotalAmount()
+            purchaseDto.getUserId(),
+            purchaseDto.getProviderId(),
+            purchaseDto.getPurchaseDate()
         );
 
-        purchase.setPurchaseId(newId);
-        return purchase;
+        purchaseDto.setPurchaseId(newId);
+        return purchaseDto;
     }
 
     @Override
     @Transactional
-    public void updatePurchase(Purchase purchase) {
+    public void updatePurchase(PurchaseDto purchaseDto) {
         purchaseRepository.updatePurchase(
-            purchase.getPurchaseId(),
-            purchase.getUser().getUserId(),
-            purchase.getProvider().getProviderId(),
-            purchase.getDate(),
-            purchase.getTotalAmount()
+            purchaseDto.getPurchaseId(),
+            purchaseDto.getUserId(),
+            purchaseDto.getProviderId(),
+            purchaseDto.getPurchaseDate()
         );
     }
 
@@ -53,5 +52,4 @@ public class PurchaseServiceImpl implements IPurchaseService{
     public void deletePurchase(Integer id) {
         purchaseRepository.deletePurchase(id);
     }
-
 }

@@ -18,6 +18,7 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> listUsers() {
         return userRepository.findAll();
     }

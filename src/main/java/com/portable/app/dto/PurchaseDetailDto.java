@@ -1,7 +1,6 @@
 package com.portable.app.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PurchaseDto {
+public class PurchaseDetailDto {
+    private Integer purchaseDetailId;
     private Integer purchaseId;
-    private Integer userId;
-    private Integer providerId;
-    private LocalDate purchaseDate;
-    private BigDecimal totalAmount;
+    private Integer productId;
+    private Integer quantity;
+    private BigDecimal unitPrice;
+    private BigDecimal subtotal;
 }

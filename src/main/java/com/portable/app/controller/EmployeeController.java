@@ -1,6 +1,7 @@
 package com.portable.app.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,50 @@ public class EmployeeController {
     @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     public List<EmployeeDto> getEmployeeListDto() {
         return employeeServiceImpl.listEmployees();
+    }
+
+    @GetMapping("/total-employees")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
+    public ResponseEntity<Integer> getTotalEmployees() {
+        try {
+            Integer total = employeeServiceImpl.getTotalEmployees();
+            return ResponseEntity.ok(total);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/total-users")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
+    public ResponseEntity<Integer> getTotalUsersWithEmployees() {
+        try {
+            Integer total = employeeServiceImpl.getTotalUsers();
+            return ResponseEntity.ok(total);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/employees-by-year")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
+    public ResponseEntity<List<Map<String, Object>>> getEmployeesByYearOfJoining() {
+        try {
+            List<Map<String, Object>> employeesByYear = employeeServiceImpl.getEmployeesByYearOfJoining();
+            return ResponseEntity.ok(employeesByYear);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Integer id) {
+        try {
+            EmployeeDto employeeDto = employeeServiceImpl.findEmployeeDtoById(id);
+            return ResponseEntity.ok(employeeDto);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/create")
@@ -63,6 +108,5 @@ public class EmployeeController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-    }
-    
+    }    
 }

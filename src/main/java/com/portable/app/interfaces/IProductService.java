@@ -9,4 +9,7 @@ public interface IProductService {
     Product createProduct(Product product);
     void updateProduct(Product product);
     void deleteProduct(Integer productId);
+    List<Object[]> top5BrandsByProductCount();
+    List<Object[]> top5ProductsBySalePrice();
+    Product findProductById(Integer productId);
 }

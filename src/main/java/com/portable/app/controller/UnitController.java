@@ -65,7 +65,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping("/top/brands")
+    @GetMapping("/top-brands")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     public List<UnitBrandDto> getTopBrands() {
         return unitServiceImpl.listUnitsPerBrand();
